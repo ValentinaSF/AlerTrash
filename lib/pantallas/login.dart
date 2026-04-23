@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (result.status == DemoLoginStatus.wrongPassword) {
       setState(() {
-        mensajeError = 'La contraseña es incorrecta';
+        mensajeError = 'La contrasena es incorrecta';
       });
       return;
     }
@@ -80,16 +80,31 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
-                      Icons.local_shipping,
-                      size: 200,
-                      color: Colors.white,
+                    SizedBox(
+                      width: 360,
+                      height: 225,
+                      child: ClipRect(
+                        child: OverflowBox(
+                          maxWidth: 400,
+                          maxHeight: 310,
+                          alignment: Alignment.topCenter,
+                          child: Transform.translate(
+                            offset: const Offset(0, 10),
+                            child: Image.asset(
+                              'assets/images/camion_login.png',
+                              width: 430,
+                              fit: BoxFit.contain,
+                              alignment: Alignment.topCenter,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 0),
                     const Text(
                       'AlerTrash',
                       style: TextStyle(
-                        fontSize: 40,
+                        fontSize: 50,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFFF2A51A),
                       ),

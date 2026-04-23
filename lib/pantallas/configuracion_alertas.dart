@@ -71,7 +71,7 @@ class _ConfiguracionAlertasScreenState
                         const Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Configuracion\nde alertas',
+                            'Configuracion\nde Alertas',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 30,
@@ -128,7 +128,7 @@ class _ConfiguracionAlertasScreenState
                                     children: [
                                       const Expanded(
                                         child: Text(
-                                          'Activar alertas',
+                                          'Activar Alertas',
                                           style: TextStyle(
                                             color: Color(0xFF2E746C),
                                             fontSize: 16,

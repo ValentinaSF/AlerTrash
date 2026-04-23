@@ -47,7 +47,7 @@ class AlertaDemoScreen extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 34),
                 child: Text(
-                  'El camion recolector esta cerca de su ubicacion',
+                  'El camión recolector esta cerca de su ubicación',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
@@ -123,7 +123,7 @@ class AlertaDemoScreen extends StatelessWidget {
                               ),
                             ),
                             child: const Text(
-                              'Volver al menu principal',
+                              'Volver al menú principal',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,

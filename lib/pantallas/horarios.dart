@@ -10,51 +10,63 @@ class HorariosScreen extends StatefulWidget {
 }
 
 class _HorariosScreenState extends State<HorariosScreen> {
-  final TextEditingController _controller = TextEditingController();
-  _HorarioInfo? resultado;
+  static const List<_HorarioSector> sectores = [
+    _HorarioSector(
+      nombre: 'Ciudadela Siglo XXI',
+      dia: 'Lunes, Miercoles y Viernes',
+      horario: '7:00 PM - 9:00 PM',
+      detalle: 'Comparte ruta con Juan XXIII y La Consolata.',
+    ),
+    _HorarioSector(
+      nombre: 'Juan XXIII',
+      dia: 'Lunes, Miercoles y Viernes',
+      horario: '7:00 PM - 9:00 PM',
+      detalle: 'Comparte ruta con Ciudadela Siglo XXI y La Consolata.',
+    ),
+    _HorarioSector(
+      nombre: 'La Consolata',
+      dia: 'Lunes, Miercoles y Viernes',
+      horario: '7:00 PM - 9:00 PM',
+      detalle: 'Ruta nocturna del mismo grupo de barrios.',
+    ),
+    _HorarioSector(
+      nombre: 'El Portal del Mirador',
+      dia: 'Martes, Jueves y Sabado',
+      horario: '8:00 AM - 10:00 AM',
+      detalle: 'Comparte recolección con Acolsure, La Paz y Los Pinos.',
+    ),
+    _HorarioSector(
+      nombre: 'Acolsure',
+      dia: 'Martes, Jueves y Sabado',
+      horario: '8:00 AM - 10:00 AM',
+      detalle: 'Comparte recolección con El Portal del Mirador y La Paz.',
+    ),
+    _HorarioSector(
+      nombre: 'La Paz',
+      dia: 'Martes, Jueves y Sabado',
+      horario: '8:00 AM - 10:00 AM',
+      detalle: 'Comparte recolección con Los Pinos y Yapura Sur.',
+    ),
+    _HorarioSector(
+      nombre: 'Los Pinos',
+      dia: 'Martes, Jueves y Sabado',
+      horario: '8:00 AM - 10:00 AM',
+      detalle: 'Barrio atendido en la ruta matutina.',
+    ),
+    _HorarioSector(
+      nombre: 'Yapura Sur',
+      dia: 'Martes, Jueves y Sabado',
+      horario: '8:00 AM - 10:00 AM',
+      detalle: 'Barrio incluido en la jornada de la manaña.',
+    ),
+  ];
 
-  final Map<String, _HorarioInfo> horarios = {
-    'la consolata': const _HorarioInfo(
-      barrio: 'La Consolata',
-      dias: 'Lunes, Miércoles y Viernes',
-      hora: '7:00 PM',
-      detalle: 'El camión pasa en la noche por este sector.',
-    ),
-    'ciudadela siglo xxi': const _HorarioInfo(
-      barrio: 'Ciudadela Siglo XXI',
-      dias: 'Lunes, Miércoles y Viernes',
-      hora: '6:30 PM',
-      detalle: 'Saca la basura 20 minutos antes.',
-    ),
-    'yapura sur': const _HorarioInfo(
-      barrio: 'Yapura Sur',
-      dias: 'Martes, Jueves y Sábado',
-      hora: '8:00 AM',
-      detalle: 'La recolección se hace en jornada de la mañana.',
-    ),
-    'acacias': const _HorarioInfo(
-      barrio: 'Acacias',
-      dias: 'Martes y Viernes',
-      hora: '9:00 AM',
-      detalle: 'Ruta compartida con barrios cercanos.',
-    ),
-  };
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _buscarHorario() {
-    final query = _controller.text.trim().toLowerCase();
-    setState(() {
-      resultado = horarios[query];
-    });
-  }
+  _HorarioSector? sectorSeleccionado = sectores.first;
 
   @override
   Widget build(BuildContext context) {
+    final sector = sectorSeleccionado;
+
     return MarcoApp(
       child: Scaffold(
         backgroundColor: const Color(0xFF2F7A72),
@@ -76,7 +88,6 @@ class _HorariosScreenState extends State<HorariosScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(22, 18, 22, 24),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Row(
                       children: [
@@ -111,9 +122,10 @@ class _HorariosScreenState extends State<HorariosScreen> {
                         letterSpacing: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 34),
+                    const SizedBox(height: 30),
                     Container(
-                      padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.95),
                         borderRadius: BorderRadius.circular(24),
@@ -129,7 +141,7 @@ class _HorariosScreenState extends State<HorariosScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Buscar barrio',
+                            'Selecciona tu barrio',
                             style: TextStyle(
                               color: Color(0xFF2F7A72),
                               fontSize: 16,
@@ -137,15 +149,14 @@ class _HorariosScreenState extends State<HorariosScreen> {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          TextField(
-                            controller: _controller,
-                            onSubmitted: (_) => _buscarHorario(),
+                          DropdownButtonFormField<_HorarioSector>(
+                            value: sectorSeleccionado,
+                            isExpanded: true,
                             decoration: InputDecoration(
-                              hintText: 'Ej: La Consolata',
-                              prefixIcon: const Icon(Icons.search),
                               filled: true,
                               fillColor: const Color(0xFFF3F6F5),
                               contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
                                 vertical: 16,
                               ),
                               border: OutlineInputBorder(
@@ -153,48 +164,40 @@ class _HorariosScreenState extends State<HorariosScreen> {
                                 borderSide: BorderSide.none,
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 14),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 48,
-                            child: ElevatedButton(
-                              onPressed: _buscarHorario,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF2F7A72),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
-                              ),
-                              child: const Text(
-                                'Consultar horario',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: Color(0xFF2F7A72),
                             ),
+                            items: sectores
+                                .map(
+                                  (item) => DropdownMenuItem<_HorarioSector>(
+                                    value: item,
+                                    child: Text(item.nombre),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                sectorSeleccionado = value;
+                              });
+                            },
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 24),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 250),
-                      child: resultado == null
-                          ? _SinResultado(
-                              key: const ValueKey('empty'),
-                              texto: _controller.text.trim().isEmpty
-                                  ? 'Escribe un barrio para ver días y hora de recolección.'
-                                  : 'No encontramos ese barrio. Prueba con La Consolata, Acacias o Yapura Sur.',
-                            )
-                          : _TarjetaHorario(
-                              key: ValueKey(resultado!.barrio),
-                              info: resultado!,
-                            ),
+                    Expanded(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 250),
+                        child: sector == null
+                            ? const SizedBox.shrink()
+                            : _TarjetaHorario(
+                                key: ValueKey(sector.nombre),
+                                info: sector,
+                              ),
+                      ),
                     ),
-                    const Spacer(),
+                    const SizedBox(height: 18),
                     SizedBox(
                       width: 230,
                       height: 56,
@@ -211,7 +214,7 @@ class _HorariosScreenState extends State<HorariosScreen> {
                           ),
                         ),
                         child: const Text(
-                          'Volver al menu',
+                          'Volver al menú',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
@@ -231,14 +234,13 @@ class _HorariosScreenState extends State<HorariosScreen> {
 }
 
 class _TarjetaHorario extends StatelessWidget {
-  final _HorarioInfo info;
+  final _HorarioSector info;
 
   const _TarjetaHorario({super.key, required this.info});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: key,
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
       decoration: BoxDecoration(
@@ -253,6 +255,7 @@ class _TarjetaHorario extends StatelessWidget {
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: 46,
@@ -266,7 +269,7 @@ class _TarjetaHorario extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           Text(
-            info.barrio,
+            info.nombre,
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Color(0xFF2F7A72),
@@ -276,7 +279,7 @@ class _TarjetaHorario extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            info.dias,
+            info.dia,
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Color(0xFF245A54),
@@ -286,7 +289,7 @@ class _TarjetaHorario extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'Hora aproximada: ${info.hora}',
+            'Horario: ${info.horario}',
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Color(0xFF245A54),
@@ -299,40 +302,6 @@ class _TarjetaHorario extends StatelessWidget {
             info.detalle,
             textAlign: TextAlign.center,
             style: const TextStyle(color: Color(0xFF5B6F6C), fontSize: 14),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SinResultado extends StatelessWidget {
-  final String texto;
-
-  const _SinResultado({super.key, required this.texto});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      key: key,
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 22, 20, 22),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.92),
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Column(
-        children: [
-          const Icon(Icons.location_city, color: Color(0xFF2F7A72), size: 38),
-          const SizedBox(height: 10),
-          Text(
-            texto,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Color(0xFF355A56),
-              fontSize: 15,
-              height: 1.35,
-            ),
           ),
         ],
       ),
@@ -427,16 +396,16 @@ class _LeafPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class _HorarioInfo {
-  final String barrio;
-  final String dias;
-  final String hora;
+class _HorarioSector {
+  final String nombre;
+  final String dia;
+  final String horario;
   final String detalle;
 
-  const _HorarioInfo({
-    required this.barrio,
-    required this.dias,
-    required this.hora,
+  const _HorarioSector({
+    required this.nombre,
+    required this.dia,
+    required this.horario,
     required this.detalle,
   });
 }
